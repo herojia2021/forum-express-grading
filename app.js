@@ -11,6 +11,8 @@ app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
+app.use(express.urlencoded({ extended: true }))
+
 require("./routes")(app)
 
 module.exports = app
