@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "set \"NODE_ENV=test\" && mocha tests --exit --recursive --timeout 5000"
+    "test": "mocha tests --exit --recursive --timeout 5000"
   },
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "express-handlebars": "^6.0.1",
+    "express-handlebars": "^5.2.0",
     "mysql2": "^2.2.5",
     "nodemon": "^2.0.12",
     "sequelize": "^6.3.5",
