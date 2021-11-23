@@ -6,7 +6,7 @@ const session = require("express-session")
 const passport = require("./config/passport")
 const methodOverride = require("method-override")
 const app = express()
-const port = 3000
+const port = process.env.PORT || 3000
 
 app.engine("handlebars", handlebars({ defaultLayout: "main" }))
 app.set("view engine", "handlebars") // 設定使用 Handlebars 做為樣板引擎
