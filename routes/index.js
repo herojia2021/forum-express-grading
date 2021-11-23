@@ -1,3 +1,4 @@
+const helpers = require("../_helpers")
 const restController = require("../controllers/restController.js")
 const adminController = require("../controllers/adminController.js")
 const userController = require("../controllers/userController.js")
@@ -6,15 +7,15 @@ const upload = multer({ dest: "temp/" })
 const fs = require("fs")
 
 const authenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
+  if (helpers.ensureAuthenticated(req)) {
     return next()
   }
   res.redirect("/signin")
 }
 
 const authenticatedAdmin = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    if (req.user.isAdmin) {
+  if (helpers.ensureAuthenticated(req)) {
+    if (helpers.getUser(req).isAdmin) {
       return next()
     }
     return res.redirect("/")
