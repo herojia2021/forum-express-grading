@@ -3,6 +3,7 @@ const restController = require("../controllers/restController.js")
 const adminController = require("../controllers/adminController.js")
 const userController = require("../controllers/userController.js")
 const categoryController = require("../controllers/categoryController.js")
+const commentController = require("../controllers/commentController.js")
 const multer = require("multer")
 const upload = multer({ dest: "temp/" })
 const fs = require("fs")
@@ -74,4 +75,6 @@ module.exports = (app, passport) => {
   app.post("/signin", passport.authenticate("local", { failureRedirect: "/signin", failureFlash: true }), userController.signIn)
 
   app.get("/logout", userController.logout)
+
+  app.post("/comments", authenticated, commentController.postComment)
 }
