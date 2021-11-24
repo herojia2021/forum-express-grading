@@ -15,7 +15,7 @@ const commentController = {
   deleteComment: (req, res) => {
     return Comment.findByPk(req.params.id).then((comment) => {
       comment.destroy().then((comment) => {
-        res.redirect(`/restaurants/${comment.RestaurantId}`)
+        return res.redirect("back") // for heroku PostgreSQL
       })
     })
   },
