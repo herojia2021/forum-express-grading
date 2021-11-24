@@ -24,7 +24,6 @@ app.use((req, res, next) => {
   next()
 })
 app.use(methodOverride("_method"))
-app.use(express.static("public"))
 app.use("/upload", express.static(__dirname + "/upload"))
 
 app.listen(port, () => {
