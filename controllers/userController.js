@@ -4,6 +4,7 @@ const User = db.User
 const Favorite = db.Favorite
 const Like = db.Like
 const helpers = require("../_helpers")
+const fs = require("fs")
 
 const userController = {
   signUpPage: (req, res) => {
@@ -90,6 +91,56 @@ const userController = {
     }).then((like) => {
       return res.redirect("back")
     })
+  },
+
+  getUser: (req, res) => {
+    return User.findByPk(req.params.id).then((user) => {
+      return res.render("profile", { user: user.toJSON() })
+    })
+  },
+
+  editUser: (req, res) => {
+    return User.findByPk(req.params.id).then((user) => {
+      return res.render("edit", { user: user.toJSON() })
+    })
+  },
+
+  putUser: (req, res) => {
+    console.log("========================+++++++++++++")
+    console.log(req)
+    const { file } = req
+    if (file) {
+      fs.readFile(file.path, (err, data) => {
+        if (err) console.log("Error: ", err)
+        fs.writeFile(`upload/${file.originalname}`, data, () => {
+          return User.findByPk(req.params.id).then((user) => {
+            user
+              .update({
+                name: req.body.name,
+                image: file ? `/upload/${file.originalname}` : user.image,
+              })
+              .then((user) => {
+                req.flash("success_messages", "使用者資料編輯成功")
+                res.redirect(`/users/${req.params.id}`)
+              })
+          })
+        })
+      })
+    } else {
+      return User.findByPk(req.params.id).then((user) => {
+        console.log(req.body)
+        user
+          .update({
+            name: req.body.name,
+            email: req.body.email,
+            image: user.image,
+          })
+          .then((user) => {
+            req.flash("success_messages", "使用者資料編輯成功")
+            res.redirect(`/users/${req.params.id}`)
+          })
+      })
+    }
   },
 }
 
