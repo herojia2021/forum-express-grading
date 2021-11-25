@@ -59,12 +59,14 @@ const restController = {
     return Restaurant.findByPk(req.params.id, {
       include: [Category, { model: User, as: "FavoritedUsers" }, { model: User, as: "LikedUsers" }, { model: Comment, include: [User] }],
     }).then((restaurant) => {
-      const isFavorited = restaurant.FavoritedUsers.map((d) => d.id).includes(req.user.id)
-      const isLiked = restaurant.LikedUsers.map((d) => d.id).includes(req.user.id)
-      return res.render("restaurant", {
-        restaurant: restaurant.toJSON(),
-        isFavorited: isFavorited,
-        isLiked: isLiked,
+      return restaurant.increment("viewCounts", { by: 1 }).then((restaurant) => {
+        const isFavorited = restaurant.FavoritedUsers.map((d) => d.id).includes(req.user.id)
+        const isLiked = restaurant.LikedUsers.map((d) => d.id).includes(req.user.id)
+        return res.render("restaurant", {
+          restaurant: restaurant.toJSON(),
+          isFavorited: isFavorited,
+          isLiked: isLiked,
+        })
       })
     })
   },
@@ -90,6 +92,15 @@ const restController = {
         restaurants: restaurants,
         comments: comments,
       })
+    })
+  },
+
+  getDashBoard: (req, res) => {
+    return Restaurant.findByPk(req.params.id, {
+      include: [Category, Comment, { model: User, as: "FavoritedUsers" }],
+    }).then((restaurant) => {
+      console.log(restaurant.toJSON())
+      return res.render("dashboard", { restaurant: restaurant.toJSON() })
     })
   },
 }
